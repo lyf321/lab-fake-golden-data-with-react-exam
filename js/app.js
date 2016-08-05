@@ -1,12 +1,12 @@
-const  App= React.createClass({
+const App = React.createClass({
     getInitialState(){
-      return{
-          isEditor:true,
-          counts:[]
-      }
+        return {
+            isEditor: true,
+            counts: []
+        }
     },
     toggle(){
-      this.setState({isEditor:!this.state.isEditor})
+        this.setState({isEditor: !this.state.isEditor})
     },
     addCount(count){
         const counts = this.state.counts;
@@ -15,19 +15,19 @@ const  App= React.createClass({
     },
     deleteCount(index){
         const counts = this.state.counts;
-        counts.splice(index,1);
+        counts.splice(index, 1);
         this.setState({counts});
     },
     render(){
-        const isEditor=this.state.isEditor;
+        const isEditor = this.state.isEditor;
         return <div>
-            <button onClick={this.toggle}>{isEditor?"预览":"编辑"}</button>
-            <div>
+            <button onClick={this.toggle}>{isEditor ? "预览" : "编辑"}</button>
+            <div className={isEditor ? "" : "hidden"}>
                 <Left counts={this.state.counts} onDelete={this.deleteCount}></Left>
                 <Right onAdd={this.addCount}></Right>
             </div>
-            <div>
-                <Preview></Preview>
+            <div className={isEditor ? "hidden" : ""}>
+                <Preview counts={this.state.counts}></Preview>
             </div>
         </div>
     }
@@ -38,10 +38,10 @@ const Left = React.createClass({
         this.props.onDelete(index)
     },
     render(){
-        const counts = this.props.counts.map((count,index)=> {
+        const counts = this.props.counts.map((count, index)=> {
             return <div key={index}>
-                    <input type={count}/>
-                <button onClick={this.remove.bind(this,index)}>X</button>
+                <input type={count}/>
+                <button onClick={this.remove.bind(this, index)}>X</button>
             </div>
         })
         return <div>
@@ -67,8 +67,16 @@ const Right = React.createClass({
 
 const Preview = React.createClass({
     render(){
-        return <div></div>
+        const counts = this.props.counts.map((count, index)=> {
+            return <div key={index}>
+                <input type={count}/>
+            </div>
+        })
+        return <div>
+            {counts}
+            <button>提交</button>
+        </div>
     }
 });
 
-ReactDOM.render(<App/>,document.getElementById('content'))
+ReactDOM.render(<App/>, document.getElementById('content'))
